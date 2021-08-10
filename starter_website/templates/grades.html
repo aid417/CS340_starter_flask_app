@@ -27,32 +27,38 @@
       </ul>
     </nav>
 
-    <h2>Grades:</h2>
-    <table>
-      <thead>
-        <th>Student Name:</th>
-        <th>Class Name:</th>
-        <th>Grade:</th>
+    <div class="form-area">
+        <div>
+            <h2>Grades:</h2>
+        </div>
+        <table>
+        <thead>
+            <th>Student Name:</th>
+            <th>Class Name:</th>
+            <th>Grade:</th>
 
-        <th></th>
-      </thead>
-      <tbody>
-        {% for g in grade_result[0] %}
-        <tr>
-          <td></td>
-          <td></td>
-          <td>{{ g[1]}}</td>
-          <td>
-            <input
-              type="button"
-              name="Delete"
-              value="Delete"
-              onclick="window.location = '/delete_grade/{{g[0]}}'"
-            />
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            <th></th>
+        </thead>
+        <tbody>
+            {% for g in grade_result[0] %}
+            <tr>
+            <td></td>
+            <td></td>
+            <td>{{ g[1]}}</td>
+            <td>
+                <input
+                type="button"
+                name="Delete"
+                value="Delete"
+                onclick="window.location = '/delete_grade/{{g[0]}}'"
+                />
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+    </div>
+    
   </body>
 </html>
