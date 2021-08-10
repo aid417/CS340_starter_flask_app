@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 from flask import request, redirect
 from db_connector.db_connector import connect_to_database, execute_query
-#create the web application
+# create the web application
 webapp = Flask(__name__)
 
-#provide a route where requests on the web application can be addressed
+# provide a route where requests on the web application can be addressed
 # @webapp.route('/hello')
 # #provide a view (fancy name for a function) which responds to any requests on this route
 # def hello():
@@ -44,38 +44,41 @@ webapp = Flask(__name__)
 #         data = (fname, lname, age, homeworld)
 #         execute_query(db_connection, query, data)
 #         return ('Person added!')
+
+
 @webapp.route('/teachers')
 def teachers_view():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
     db_connection = connect_to_database()
     query = "SELECT * from Teachers;"
     result = execute_query(db_connection, query).fetchall()
-  
 
     teach_results = []
     print(result)
     for i in range(0, len(result)):
-        
+
         query2 = "SELECT * from TeacherClassList where teacher_id = %s;"
         data = (result[i][0],)
         result2 = execute_query(db_connection, query2, data).fetchall()
-       
+
         classes = []
         for j in range(0, len(result2)):
-            
+
             query3 = "SELECT * from Classes WHERE class_id = %s;"
             data = (result2[j][2],)
-            class_result = execute_query(db_connection, query3, data).fetchall()
-        
+            class_result = execute_query(
+                db_connection, query3, data).fetchall()
+
             classes.append(class_result)
-    
+
         teacher = (result[i], classes)
-       
+
         teach_results.append(teacher)
-       
-    
+
     return render_template('teachers.html', rows=teach_results)
-@webapp.route('/update_teacher/<int:id>', methods=['POST','GET'])
+
+
+@webapp.route('/update_teacher/<int:id>', methods=['POST', 'GET'])
 def update_teacher(id):
     db_connection = connect_to_database()
 
@@ -88,13 +91,15 @@ def update_teacher(id):
         # print(request.form)
         first_name = request.form['first_name']
         last_name = request.form['lname']
-       
-        query = "UPDATE Teachers SET first_name = %s , last_name = %s WHERE teacher_id = %s " 
+
+        query = "UPDATE Teachers SET first_name = %s , last_name = %s WHERE teacher_id = %s "
         data = (first_name, last_name, id)
         execute_query(db_connection, query, data)
 
         return redirect('/teachers')
-@webapp.route('/add_teacher', methods=['POST','GET'])
+
+
+@webapp.route('/add_teacher', methods=['POST', 'GET'])
 def add_teacher():
     db_connection = connect_to_database()
 
@@ -109,8 +114,10 @@ def add_teacher():
         query = "INSERT INTO Teachers (first_name, last_name) VALUES (%s,%s);"
         data = (first_name, last_name)
         execute_query(db_connection, query, data)
-       
+
         return redirect('/teachers')
+
+
 @webapp.route('/delete_teacher/<int:id>')
 def delete_teacher(id):
     '''deletes a teacher with the given id'''
@@ -124,12 +131,14 @@ def delete_teacher(id):
     result = execute_query(db_connection, query, data)
     return redirect('/teachers')
 # Grades
-@webapp.route('/add_grade/<int:id>/<int:class_id>', methods=['POST','GET'])
+
+
+@webapp.route('/add_grade/<int:id>/<int:class_id>', methods=['POST', 'GET'])
 def add_grade(id, class_id):
     db_connection = connect_to_database()
 
     if request.method == 'GET':
-        
+
         query1 = "SELECT * from Students where student_id = %s;"
         data = (id,)
         student_result = execute_query(db_connection, query1, data).fetchall()
@@ -155,6 +164,8 @@ def add_grade(id, class_id):
         data = (grade_id[0][0], id)
         execute_query(db_connection, query5, data)
         return redirect('/grades')
+
+
 @webapp.route('/delete_grade/<int:id>')
 def delete_grade(id):
     db_connection = connect_to_database()
@@ -163,6 +174,8 @@ def delete_grade(id):
 
     result = execute_query(db_connection, query, data)
     return redirect('/grades')
+
+
 @webapp.route('/grades')
 def grades_view():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
@@ -173,11 +186,11 @@ def grades_view():
     result2 = execute_query(db_connection, query2).fetchall()
     grades_res = (result, result2)
 
-
     # print(grades_res)
-   
-  
-    return render_template('grades.html', grade_result = grades_res)
+
+    return render_template('grades.html', grade_result=grades_res)
+
+
 @webapp.route('/delete_student/<int:id>')
 def delete_student(id):
     '''deletes a student with the given id'''
@@ -189,11 +202,13 @@ def delete_student(id):
     execute_query(db_connection, query6, data)
     query2 = "DELETE from Students where student_id = %s;"
     result2 = execute_query(db_connection, query2, data)
-    
+
     print('hello')
-   
+
     return redirect('/students')
-@webapp.route('/add_student', methods=['POST','GET'])
+
+
+@webapp.route('/add_student', methods=['POST', 'GET'])
 def add_student():
     db_connection = connect_to_database()
 
@@ -202,7 +217,7 @@ def add_student():
         result = execute_query(db_connection, query).fetchall()
         print(result)
     elif request.method == 'POST':
-        
+
         print(request.form.getlist('classes'))
 
         first_name = request.form['first_name']
@@ -217,13 +232,13 @@ def add_student():
         student_id = execute_query(db_connection, query2).fetchall()
         print(student_id[0][0])
         for i in range(0, len(classes)):
-            
+
             query3 = "INSERT INTO StudentList (class_student_id, student_id) VALUES (%s, %s);"
             data = (classes[i], student_id[0][0])
             execute_query(db_connection, query3, data)
         # name = request.form['title']
         # teacher_id = request.form['teacher']
-    
+
         # query = "INSERT INTO Classes (name) VALUES (%s);"
         # data = (name,)
         # execute_query(db_connection, query, data)
@@ -231,13 +246,14 @@ def add_student():
         # class_id = execute_query(db_connection, query2).fetchall()
         # class_id = class_id[0][0]
         # teacher_class_list_id = teacher_id
-      
+
         # query3 = "INSERT INTO TeacherClassList (teacher_class_list_id, class_id) VALUES (%s, %s);"
         # data = (teacher_class_list_id, class_id)
         # execute_query(db_connection, query3, data)
-     
-        
+
         return redirect('/students')
+
+
 @webapp.route('/students')
 def students_view():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
@@ -278,6 +294,7 @@ def students_view():
     # print(result[0])
     return render_template('students.html', rows=result)
 
+
 @webapp.route('/delete_class/<int:id>')
 def delete_class(id):
     '''deletes a class with the given id'''
@@ -298,14 +315,15 @@ def delete_class(id):
         query5 = "DELETE from Grades where grade_id = %s;"
         execute_query(db_connection, query5, data)
 
-    
     # print(grade_result)
     query = "DELETE from Classes where class_id = %s;"
     data = (id,)
     result = execute_query(db_connection, query, data)
-   
+
     return redirect('/classes')
-@webapp.route('/add_class', methods=['POST','GET'])
+
+
+@webapp.route('/add_class', methods=['POST', 'GET'])
 def add_class():
     db_connection = connect_to_database()
 
@@ -317,7 +335,7 @@ def add_class():
         print(request.form)
         name = request.form['title']
         teacher_id = request.form['teacher']
-    
+
         query = "INSERT INTO Classes (name) VALUES (%s);"
         data = (name,)
         execute_query(db_connection, query, data)
@@ -325,14 +343,15 @@ def add_class():
         class_id = execute_query(db_connection, query2).fetchall()
         class_id = class_id[0][0]
         teacher_class_list_id = teacher_id
-      
+
         query3 = "INSERT INTO TeacherClassList (teacher_id, class_id) VALUES (%s, %s);"
         data = (teacher_class_list_id, class_id)
         execute_query(db_connection, query3, data)
-     
-        
+
         return redirect('/classes')
-@webapp.route('/update_class/<int:id>', methods=['POST','GET'])
+
+
+@webapp.route('/update_class/<int:id>', methods=['POST', 'GET'])
 def update_class(id):
     db_connection = connect_to_database()
 
@@ -343,13 +362,13 @@ def update_class(id):
         query2 = "SELECT * from Teachers;"
         result2 = execute_query(db_connection, query2).fetchall()
         result = (result, result2)
-     
+
         return render_template('update_class.html', result=result)
     elif request.method == 'POST':
         print(request.form, 'post')
         name = request.form['class_name']
         teacher_class_list_id = request.form['teacher']
-     
+
         query = "DELETE from TeacherClassList where class_id = %s;"
         data = (id,)
         execute_query(db_connection, query, data)
@@ -359,10 +378,10 @@ def update_class(id):
         query3 = "INSERT INTO TeacherClassList (teacher_id, class_id) VALUES (%s, %s);"
         data = (teacher_class_list_id, id,)
         execute_query(db_connection, query3, data)
-       
-        
 
         return redirect('/classes')
+
+
 @webapp.route('/classes')
 def classes_view():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
@@ -371,11 +390,11 @@ def classes_view():
     result = execute_query(db_connection, query).fetchall()
     query2 = "SELECT * from Teachers;"
     teach_result = execute_query(db_connection, query2).fetchall()
-    
+
     final_results = []
     # print(result, 'result')
     for i in range(0, len(result)):
-      
+
         query3 = "SELECT * from TeacherClassList WHERE class_id = %s;"
         data = (result[i][0],)
         result2 = execute_query(db_connection, query3, data).fetchall()
@@ -383,31 +402,34 @@ def classes_view():
         # print(result2[0], 'result2')
         query5 = "SELECT * from StudentList WHERE class_student_id = %s;"
         result5 = execute_query(db_connection, query5, data).fetchall()
-        
+
         student_list = []
         for j in range(0, len(result5)):
             query6 = "SELECT * from Students where student_id = %s;"
             data = (result5[j][2],)
             student = execute_query(db_connection, query6, data).fetchall()
             student_list.append(student[0])
-       
+
         if len(result2) > 0:
             query4 = "SELECT * from Teachers WHERE teacher_id = %s;"
             data = (result2[0][1],)
             result3 = execute_query(db_connection, query4, data).fetchall()
-            
-            join_result = (result[i][0], result[i][1], result3[0][0], result3[0][1], result3[0][2])
+
+            join_result = (result[i][0], result[i][1],
+                           result3[0][0], result3[0][1], result3[0][2])
 
             join_result = join_result, student_list
             # print(join_result, 'join result')
             final_results.append(join_result)
-        
+
     final_results = (final_results, teach_result)
-    
+
     # for c in final_results[0]:
     #     print(c, 'c')
     # print(final_results[0], 'results 0')
-    return render_template('classes.html', result = final_results)
+    return render_template('classes.html', result=final_results)
+
+
 @webapp.route('/')
 def index():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
