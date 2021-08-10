@@ -41,6 +41,13 @@
             {% endfor %}
             <input type="submit" value="Submit" />
         </form>
+
+        <h2>Student Search by First Name</h2>
+        <form id="student_search" action="/student_search" method=POST>
+            <label for="student">First Name:</label><br />
+            <input type="text" id="first_name" name="first_name" /><br />
+            <input type="submit" value="Submit" />
+        </form>
         <h2>Students:</h2>
         <table id="student_table">
             <thead>

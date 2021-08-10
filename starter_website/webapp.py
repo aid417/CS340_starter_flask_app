@@ -384,6 +384,23 @@ def add_student():
      
         
         return redirect('/students')
+@webapp.route('/student_search' ,methods=['POST','GET'])
+def student_search():
+    db_connection = connect_to_database()
+    if request.method == 'GET':
+        # query = 'SELECT id, name from bsg_planets'
+        # result = execute_query(db_connection, query).fetchall()
+        # print(result)
+        return redirect('/students')
+    elif request.method == 'POST':
+        print(request.form, 'search form')
+        first_name = request.form['first_name']
+
+        query = "SELECT * from Students where first_name = %s;"
+        data = (first_name,)
+        students_result = execute_query(db_connection, query, data).fetchall()
+        # print(students_result)
+        return render_template('search_results.html', students = students_result)
 @webapp.route('/students')
 def students_view():
     # return "<p>Are you looking for /db_test or /hello or <a href='/browse_bsg_people'>/browse_bsg_people</a> or /add_new_people or /update_people/id or /delete_people/id </p>"
@@ -418,13 +435,26 @@ def students_view():
                     query = "SELECT * from Grades where grade_id = %s and class_id = %s;"
                     data = (r[1], result4[j][1])
                     grade_number = execute_query(db_connection, query, data).fetchall()
-                    print(grade_number, 'grade #')
+                    # print(grade_number, 'grade #')
                     if grade_number:
                         # print(grade_number[0])
                         # print(class_list, 'class_list')
-                        class_res = result5[0], grade_number[0][1]
-                        class_list.append(class_res)
-                        class_ids.append(result4[j][1])
+                        # print(class_ids, grade_number , 'test')
+                        if class_ids.count(result4[j][1]) == 1:
+                            for x in range(0, len(class_list)):
+                                if class_list[x][0][0] == result4[j][1]:
+                                    
+
+                                    class_list.remove(class_list[x])
+                                    
+                                    class_res = result5[0], grade_number[0][1]
+                                    class_list.append(class_res)
+            
+                            # print(class_list, 'class_list')
+                        else:
+                            class_res = result5[0], grade_number[0][1]
+                            class_list.append(class_res)
+                            class_ids.append(result4[j][1])
                     else:
                         if class_ids.count(result4[j][1]) == 0:
                             class_res = result5[0], ()
@@ -440,12 +470,13 @@ def students_view():
                 class_list.append(class_res)
                 class_ids.append(result4[j][1])
         # print('hit')
+        # print(class_list)
         student = result[i], class_list
-        print(student, 'student')
+        # print(student, 'student')
         student_list.append(student)
-    # print(student_list)
+    # print(student_list, 'student_list')
     result = student_list, result2
-    print(result)
+    # print(result)
     return render_template('students.html', rows=result)
 
 @webapp.route('/delete_class/<int:id>')
