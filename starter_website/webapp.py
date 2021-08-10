@@ -124,6 +124,28 @@ def delete_teacher(id):
     result = execute_query(db_connection, query, data)
     return redirect('/teachers')
 # Grades
+@webapp.route('/update_grade/<int:id>', methods=['POST','GET'])
+def update_grade(id):
+    db_connection = connect_to_database()
+
+    if request.method == 'GET':
+        query = 'SELECT * from Grades WHERE grade_id = %s;' 
+        data = (id,)
+        result = execute_query(db_connection, query, data).fetchall()
+        print(result, 'grade result edit')
+        return render_template('update_grade.html', grade=result)
+    elif request.method == 'POST':
+        print(request.form)
+        # first_name = request.form['first_name']
+        # last_name = request.form['lname']
+        grade_number = request.form['grade_number']
+        # print(grade_number)
+        query = "UPDATE Grades SET grade_number = %s  WHERE grade_id = %s; " 
+        data = (grade_number, id)
+        # data = (first_name, last_name, id)
+        execute_query(db_connection, query, data)
+
+        return redirect('/grades')
 @webapp.route('/add_grade/<int:id>/<int:class_id>', methods=['POST','GET'])
 def add_grade(id, class_id):
     db_connection = connect_to_database()
