@@ -52,6 +52,35 @@
                 <td></td>
             </thead>
             
+<<<<<<< HEAD
+            <th></th>
+            <th></th>
+        </thead>
+           
+        
+      <tbody>
+        {% for r in rows[0] %}
+          <tr>
+              <td>{{ r[0][1] }}</td>
+              <td>{{ r[0][2] }}</td>
+            <td>
+                <ul>
+                    {% for c in r[1] %}
+                    <div class="grade-div">
+                        <li >{{ c[0][1]}}</li>
+                    {% if not c[1]%}
+                    <input type='button' name='Add Grade' value='Add Grade'
+                    onclick="window.location = '/add_grade/{{r[0][0]}}/{{ c[0][0]}} '">
+                    {% endif %}
+                    {% if c[1] %}
+                    <p>Grade: {{ c[1]}}</p>
+                    {% endif %}
+                    </div>
+                    
+                    {% endfor %}
+                </ul>
+              
+=======
             
         <tbody>
             {% for r in rows[0] %}
@@ -75,6 +104,7 @@
                         {% endfor %}
                     </ul>
                 
+>>>>>>> 5362bea2003d957297e1cf9716a817137c22236f
 
             </td>
             <td> <input type='button' name='Edit' value='Edit'

@@ -1,7 +1,154 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+/*  ******  Global Styles  ******  */
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+ul,
+p,
+tr,
+th,
+td,
+label,
+li {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background-color: aliceblue;
+  margin-bottom: 100px;
+}
+
+.top-header-text {
+  display: flex;
+  width: auto;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #abc4ff;
+  border: none;
+  font-size: 25px;
+}
+
+/* Button Styling */
+
+input[type=button] {
+  background-color: #97b6fe;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+input[type=button]:hover {
+  background-color: #abc4ff;
+}
+
+/* Form Styling */
+
+.form-area {
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+input[type=text], select {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+input[type=submit] {
+  width: 30%;
+  background-color: #97b6fe;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+input[type=submit]:hover {
+  background-color: #abc4ff;
+}
+
+/*  ******  NavBar Styles   ****** */
+nav {
+  background-color: #abc4ff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+nav ul {
+  display: flex;
+  justify-content: center;
+}
 nav ul li {
   display: inline-block;
   padding-right: 30px;
 }
+nav ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+/* ****** Home Style  ******  */
+
+.main-heading {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: 50px;
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+.main-heading-text {
+  font-size: 40px;
+}
+
+.home-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row wrap;
+  margin-top: 50px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.home-btn {
+  background-color: #abc4ff;
+  border: none;
+  color: black;
+  padding: 75px 75px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  font-weight: 700;
+  border-radius: 10px;
+  margin: 30px;
+}
+.home-btn:hover {
+  background-color: #c1d3fe;
+  cursor: pointer;
+}
+/* Other */
 
 li {
   list-style: none;
@@ -13,9 +160,6 @@ td {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 20px;
-}
-h2 {
-  border: 1px solid orange;
 }
 
 #student_table {
