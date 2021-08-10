@@ -38,6 +38,7 @@
             <th>Grade:</th>
 
             <th></th>
+            <th></th>
         </thead>
         <tbody>
             {% for g in grade_result %}
@@ -45,9 +46,12 @@
                 <td>{{ g[0][0][1]}} {{ g[0][0][2]}}</td>
                 <td>{{ g[2][0][1]}}</td>
                 <td>{{ g[1][0][1]}}</td>
+                <td> <input type='button' name='Edit' value='Edit'
+                    onclick="window.location = '/update_grade/{{g[1][0][0]}}'"> </td>
+
                 <td> <input type='button' name='Delete' value='Delete'
                     onclick="window.location = '/delete_grade/{{g[1][0][0]}}'"> </td>
-
+                   
             </tr>
             {% endfor %}
         </tbody>
